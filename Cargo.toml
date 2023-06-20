@@ -1,0 +1,8 @@
+[workspace]
+
+members = [
+    "loader",
+    "libalpha",
+    "libbeta",
+    "alphacommons",
+]
