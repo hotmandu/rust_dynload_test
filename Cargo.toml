@@ -5,4 +5,5 @@ members = [
     "libalpha",
     "libbeta",
     "alphacommons",
+    "libtimer",
 ]

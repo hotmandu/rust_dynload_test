@@ -143,6 +143,9 @@ fn main() {
             break;
         } else {
             // TODO: addon_list.write() inside issue() will cause a deadlock... How to fix it?
+            // Why should I fix this?
+            //  - addon_list.write() is called whenever a plugin tries to load another plugin.
+            //    But why a plugin loads other plugin at first?
             let al_b = addon_list.read().unwrap();
             let res = al_b.get(input);
             if let Some(addon) = res {

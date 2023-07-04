@@ -188,6 +188,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "libtimer"
+version = "0.1.0"
+dependencies = [
+ "abi_stable",
+ "alphacommons",
+ "loader",
+]
+
+[[package]]
 name = "loader"
 version = "0.1.0"
 dependencies = [

@@ -1,4 +1,4 @@
-use abi_stable::{export_root_module, prefix_type::PrefixTypeTrait, sabi_extern_fn, std_types::{RBox, RStr, RSlice}, sabi_trait::TD_Opaque};
+use abi_stable::{export_root_module, prefix_type::PrefixTypeTrait, sabi_extern_fn, std_types::{RBox, RStr, RSlice}, sabi_trait::TD_Opaque, DynTrait};
 use loader::{AddonObject_Ref, AddonObject, Logger_TO, Addon, Addon_TO, IssueResult, BoxedAddonInterface, MainInterface_TO};
 
 use alphacommons::{AlphaApiBox};
@@ -54,6 +54,6 @@ impl Addon for ReduceCounter {
     }
 
     fn get_interface(&self) -> BoxedAddonInterface<'static> {
-        todo!()
+        DynTrait::from_value(())
     }
 }
