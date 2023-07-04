@@ -101,6 +101,9 @@ fn main() {
         }
 
         for (name, addon_ref) in addon_base_list.iter() {
+            // Load only if not loaded before
+            if addon_list.read().unwrap().contains_key(name) { continue; }
+
             let deps = addon_ref.dependency();
             let al_b = addon_list.read().unwrap();
             let deps_ok = deps.iter().all(|dep| al_b.contains_key(dep.as_str()));
