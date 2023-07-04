@@ -1,4 +1,4 @@
-use std::{thread::{self, JoinHandle}, cell::{RefCell, Cell}, ops::DerefMut, sync::mpsc::{self, Receiver, Sender}, time::Duration};
+use std::{thread::{self, JoinHandle}, cell::Cell, sync::mpsc::{self, Sender}, time::Duration};
 
 use abi_stable::{export_root_module, prefix_type::PrefixTypeTrait, sabi_extern_fn, std_types::{RBox, RStr, RSlice}, sabi_trait::TD_Opaque, DynTrait};
 use loader::{AddonObject_Ref, AddonObject, Logger_TO, Addon, Addon_TO, IssueResult, BoxedAddonInterface, MainInterface_TO};
@@ -57,6 +57,7 @@ impl Addon for TimerAddon {
                 Some(rb) => {
                     let (send, recv) = mpsc::channel::<()>();
                     let rebr = rb;
+                    let logger = self.logger.clone();
                     let ssp = thread::spawn(move || {
                         loop {
                             if let Ok(_) = recv.recv_timeout(Duration::from_secs(3)) {
@@ -65,6 +66,7 @@ impl Addon for TimerAddon {
                             }
                             let before = rebr.get_counter();
                             rebr.set_counter(before + 1);
+                            logger.log("Increased counter!".into());
                         }
                         rebr
                     });

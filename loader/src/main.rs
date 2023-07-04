@@ -3,6 +3,7 @@ use std::{fs, env, path::PathBuf, io::{stdin, stdout, Write}, collections::HashM
 use abi_stable::{std_types::{RBox, RStr, ROption, RString}, sabi_trait::TD_Opaque};
 use loader::{Logger, Logger_TO, MainInterface, MainInterface_TO, BoxedAddonInterface};
 
+#[derive(Clone)]
 struct NamedLogger {
     name: String,
 }

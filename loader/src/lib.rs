@@ -9,7 +9,9 @@ use abi_stable::{
 };
 
 #[sabi_trait]
-pub trait Logger {
+#[sabi()]
+// FIXME: Intellisense not showing correctly if ': Clone' is used.
+pub trait Logger : Send + Sync + Clone {
     fn log(&self, msg: RStr);
 }
 
