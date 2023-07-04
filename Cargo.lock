@@ -53,6 +53,10 @@ dependencies = [
 [[package]]
 name = "alphacommons"
 version = "0.1.0"
+dependencies = [
+ "abi_stable",
+ "libloading 0.8.0",
+]
 
 [[package]]
 name = "as_derive_utils"

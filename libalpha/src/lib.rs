@@ -1,7 +1,7 @@
 use std::sync::{atomic::{AtomicI32, Ordering}, Arc};
 
 use abi_stable::{export_root_module, prefix_type::PrefixTypeTrait, sabi_extern_fn, std_types::{RBox, RStr, RSlice}, sabi_trait::TD_Opaque, DynTrait};
-use alphacommons::AlphaAddonInterface;
+use alphacommons::{AlphaApi};
 use loader::{AddonObject_Ref, AddonObject, Logger_TO, Addon, Addon_TO, IssueResult, MainInterface_TO};
 
 #[export_root_module]
@@ -25,6 +25,20 @@ pub struct SimpleCounter {
     logger: Logger_TO<'static, RBox<()>>
 }
 
+struct ImplAlphaApi { 
+    cc: Arc<AtomicI32>,
+}
+
+impl AlphaApi for ImplAlphaApi {
+    fn get_counter(&self) -> i32 {
+        self.cc.load(Ordering::Relaxed)
+    }
+
+    fn set_counter(&self, v: i32) {
+        self.cc.store(v, Ordering::Relaxed);
+    }
+}
+
 impl Addon for SimpleCounter {
     fn on_load(&mut self, _mi: MainInterface_TO<'static, RBox<()>>) -> () {
         self.counter.store(0, Ordering::Relaxed);
@@ -40,6 +54,7 @@ impl Addon for SimpleCounter {
     }
 
     fn get_interface(&self) -> loader::BoxedAddonInterface<'static> {
-        DynTrait::from_value(AlphaAddonInterface::new(Arc::clone(&self.counter)))
+        let obj = ImplAlphaApi { cc: (Arc::clone(&self.counter)) };
+        DynTrait::from_value(alphacommons::AlphaApiBox::from_value(obj, TD_Opaque))
     }
 }

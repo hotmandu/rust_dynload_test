@@ -1,7 +1,7 @@
 use abi_stable::{export_root_module, prefix_type::PrefixTypeTrait, sabi_extern_fn, std_types::{RBox, RStr, RSlice}, sabi_trait::TD_Opaque};
 use loader::{AddonObject_Ref, AddonObject, Logger_TO, Addon, Addon_TO, IssueResult, BoxedAddonInterface, MainInterface_TO};
 
-use alphacommons::AlphaAddonInterface;
+use alphacommons::{AlphaApiBox};
 
 static DEPENDENCY: [RStr<'static>; 1] = [RStr::from_str("simpcnt")];
 
@@ -23,13 +23,13 @@ pub fn new_addon(logger: Logger_TO<'static, RBox<()>>) -> Addon_TO<'static, RBox
 
 pub struct ReduceCounter {
     logger: Logger_TO<'static, RBox<()>>,
-    alpha_interface: Option<RBox<AlphaAddonInterface>>
+    alpha_interface: Option<RBox<AlphaApiBox>>
 }
 
 impl Addon for ReduceCounter {
     fn on_load(&mut self, mi: MainInterface_TO<'static, RBox<()>>) -> () {
         self.logger.log("ReduceCounter on_load() called!".into());
-        self.alpha_interface = mi.get_interface_of("simpcnt".into()).into_option().map(|v| unsafe { v.unchecked_downcast_into::<AlphaAddonInterface>() } );
+        self.alpha_interface = mi.get_interface_of("simpcnt".into()).into_option().map(|v| unsafe { v.unchecked_downcast_into::<AlphaApiBox>() } );
     }
 
     fn issue(&self) -> loader::IssueResult {

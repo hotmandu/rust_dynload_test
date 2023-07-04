@@ -1,20 +1,9 @@
-use std::sync::{Arc, atomic::{AtomicI32, Ordering}};
+use abi_stable::{sabi_trait, std_types::RBox};
 
-
-pub struct AlphaAddonInterface {
-    cc: Arc<AtomicI32>
+#[sabi_trait]
+pub trait AlphaApi {
+    fn get_counter(&self) -> i32;
+    fn set_counter(&self, v: i32) -> ();
 }
 
-impl AlphaAddonInterface {
-    pub fn new(counter: Arc<AtomicI32>) -> Self {
-        Self { cc: counter }
-    }
-
-    pub fn get_counter(&self) -> i32 {
-        self.cc.load(Ordering::Relaxed)
-    }
-
-    pub fn set_counter(&self, v: i32) {
-        self.cc.store(v, Ordering::Relaxed);
-    }
-}
+pub type AlphaApiBox = AlphaApi_TO<'static, RBox<()>>;
